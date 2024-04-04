@@ -29,7 +29,7 @@
         "statements": 50
       },
       "collectCoverageFrom": [
-        "**/*.{js,jsx}",
+        "7.3/**/*.{js,jsx}",
         "!**/node_modules/**",
         "!**/coverage/**"
       ]
