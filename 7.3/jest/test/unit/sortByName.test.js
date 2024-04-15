@@ -33,4 +33,23 @@ describe("Books names test suit", () => {
   it("Non-array input should throw an exception", () => {
     expect(() => sorting.sortByName("invalid input")).toThrow(TypeError);
   });
+
+  it("Should return the same array if all books are the same", () => {
+    const input = [
+      "Гарри Поттер",
+      "Гарри Поттер",
+      "Гарри Поттер",
+    ];
+
+    const expected = [
+      "Гарри Поттер",
+      "Гарри Поттер",
+      "Гарри Поттер",
+    ];
+
+    const output = sorting.sortByName(input);
+
+    expect(output).toEqual(expected);
+});
+
 });
