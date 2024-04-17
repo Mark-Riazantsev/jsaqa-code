@@ -1,14 +1,23 @@
 {
-  "name": "cypress",
+  "name": "7.6",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cy:run": "cypress run",
+    "cy:run_headded": "cypress run --headed",
+    "cy:run_headless": "cypress run --headless",
+    "cy:run_chrome": "cypress run --browser chrome",
+    "cy:run_firefox": "cypress run --browser firefox",
+    "cy:run_headdedenv": "cypress run --env --headed",
+    "cy:run_headlessenv": "cypress run --env --headless",
+    "cy:run_chromeenv": "cypress run --env --browser chrome",
+    "cy:run_firefoxenv": "cypress run --env --browser firefox"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^13.7.3"
-  }
+    "cypress": "^13.6.2"
+  },
+  "devDependencies": {},
+  "description": ""
 }
