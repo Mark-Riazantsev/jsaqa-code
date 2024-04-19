@@ -1,4 +1,6 @@
 /node_modules/
+package-lock.json
+/user.js
 
 
 .vscode/*
@@ -7,7 +9,6 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
-user.js
 
 # Local History for Visual Studio Code
 .history/

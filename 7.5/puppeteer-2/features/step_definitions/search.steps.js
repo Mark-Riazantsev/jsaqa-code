@@ -1,68 +1,81 @@
 const puppeteer = require("puppeteer");
 const chai = require("chai");
 const expect = chai.expect;
-const { Given, When, Then, Before, After } = require("@cucumber/cucumber");
-const { clickElement, getText } = require("./lib/commands.js");
-var {setDefaultTimeout} = require('@cucumber/cucumber');
-setDefaultTimeout(60 * 1000);
+const {
+  Given,
+  When,
+  Then,
+  Before,
+  After,
+  setDefaultTimeout,
+} = require("cucumber");
+const { clickElement, getText } = require("../../lib/commands.js");
 
-Before({timeout: 60000}, async function () {
+setDefaultTimeout(60000);
+
+Before(async function () {
   const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
   const page = await browser.newPage();
   this.browser = browser;
   this.page = page;
 });
-    
+
 After(async function () {
   if (this.browser) {
     await this.browser.close();
   }
 });
 
-Given("user is on {string} page", async function (string) {
-  return await this.page.goto(`http://qamid.tmweb.ru/client/index.php`, {
+Given("User is on the {string} page", async function (string) {
+  return await this.page.goto("https://qamid.tmweb.ru/client/index.php", {
     setTimeout: 60000,
   });
 });
 
-When("user chooses by {string}", {
-  timeout: 60 * 1000
-}, async function (string) {
-  await clickElement(this.page, string);
+When("User chooses convenient date", async function () {
+  return await clickElement(this.page, "a:nth-child(2)");
 });
 
-When("user chooses movie {string}", async function (string) {
-  return await clickElement(this.page, string);
+When("User chooses convenient time", async function () {
+  return await clickElement(
+    this.page,
+    "body > main > section:nth-child(1) > div:nth-child(2) > ul > li:nth-child(3) > a"
+  );
 });
 
-When("user chooses seat {string}", async function (string) {
-  return await clickElement(this.page, string);
+When("User books available seats", async function () {
+  await clickElement(
+    this.page,
+    ".buying-scheme__chair_standart:not(.buying-scheme__chair_taken, .buying-scheme__chair_selected)"
+  );
+  await clickElement(
+    this.page,
+    ".buying-scheme__chair_standart:not(.buying-scheme__chair_taken, .buying-scheme__chair_selected)"
+  );
+  return await clickElement(this.page, "button.acceptin-button");
 });
 
-When("user click {string}", async function (string) {
-  return await clickElement(this.page, string);
+When("User books vip seat", async function () {
+  await clickElement(this.page, ".buying-scheme__chair_vip");
+  return await clickElement(this.page, "button.acceptin-button");
 });
 
-Then("user sees text {string}", async function (string) {
+When("User books taken seat", async function () {
+  return await clickElement(this.page, ".buying-scheme__chair_taken");
+});
+
+Then("User can see text {string}", async function (string) {
   const actual = await getText(this.page, ".ticket__check-title");
   const expected = await string;
   expect(actual).contains(expected);
 });
 
-Then("user sees the header {string}", async function (string) {
-  const actual = await getText(this.page, "h2");
-  const expected = await string;
-  expect(actual).contains(expected);
-});
-
-Then("user sees {string} is gray", {
-  timeout: 60 * 1000
-}, async function (string) {
-
-  await clickElement(this.page, string);
-  await this.page.waitForNavigation(30000);
-  const isDisabled = await page.$eval("button", (button) => button.disabled);
-  await this.page.waitForNavigation(30000);
-
-  await expect(isDisabled).to.equal(true);
+Then("Button {string} is disabled", async function (string) {
+  const actualAttribtue = await this.page.$eval(
+    "button.acceptin-button",
+    (link) => link.getAttribute("disabled")
+  );
+  const actualText = await getText(this.page, "button.acceptin-button");
+  expect(actualAttribtue).contain("true");
+  expect(actualText).contain(string);
 });
