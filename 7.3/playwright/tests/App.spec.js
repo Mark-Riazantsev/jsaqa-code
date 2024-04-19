@@ -1,22 +1,27 @@
-// const { test, expect } = require("@playwright/test");
+import { test, expect } from "@playwright/test";
+import { chromium } from "playwright";
+import { email, password } from "../user";
 
-// test("test", async ({ page }) => {
-  // Go to https://netology.ru/free/management#/
-  // await page.goto("https://netology.ru/free/management#/");
+test("PositiveTest", async ({ page }) => {
+  await page.goto("https://netology.ru/?modal=sign_in");
+  await expect(page).toHaveURL("https://netology.ru/?modal=sign_in");
+  await page.locator('[placeholder="Email"]').click();
+  await page.locator('[placeholder="Email"]').fill(email);
+  await page.locator('[placeholder="Пароль"]').click();
+  await page.locator('[placeholder="Пароль"]').fill(password);
+  await page.locator('[data-testid="login-submit-btn"]').click();
+  await page.waitForURL("https://netology.ru/profile/8722434");
+  await expect(page).toHaveURL("hhttps://netology.ru/profile/8722434");
+});
 
-  // Click a
-  // await page.click("a");
-  // await expect(page).toHaveURL("https://netology.ru/");
-
-  // Click text=Учиться бесплатно
-  // await page.click("text=Учиться бесплатно");
-  // await expect(page).toHaveURL("https://netology.ru/free");
-
-  // page.click("text=Бизнес и управление");
-
-  // Click text=Как перенести своё дело в онлайн
-  // await page.click("text=Как перенести своё дело в онлайн");
-  // await expect(page).toHaveURL(
-  //   "https://netology.ru/programs/kak-perenesti-svoyo-delo-v-onlajn-bp"
-  // );
-// });
+test("NegativeTest", async ({ page }) => {
+  await page.goto("https://netology.ru/?modal=sign_in");
+  await expect(page).toHaveURL("https://netology.ru/?modal=sign_in");
+  await page.locator('[placeholder="Email"]').click();
+  await page.locator('[placeholder="Email"]').fill("testtest@gmail.com");
+  await page.locator('[placeholder="Пароль"]').click();
+  await page.locator('[placeholder="Пароль"]').fill("123456789");
+  await page.locator('[data-testid="login-submit-btn"]').click();
+  const error = await page.locator('[data-testid="login-error-hint"]');
+  await expect(error).toHaveText("Вы ввели неправильно логин или пароль");
+});
